@@ -1,0 +1,39 @@
+name: Clairo Daily Bot
+
+on:
+  schedule:
+    # 03:00 UTC equivale a las 21:00 (9:00 PM) hora centro de México
+    - cron: '0 3 * * *'
+  workflow_dispatch: 
+
+permissions:
+  contents: write
+
+jobs:
+  publicar_foto:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar el bot
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+        run: node index.js
+
+      - name: Guardar el progreso en GitHub
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add state.json
+          git commit -m "Bot: Actualizar índice de la foto [skip ci]" || echo "Sin cambios"
+          git push
