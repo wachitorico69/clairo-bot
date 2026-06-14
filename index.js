@@ -45,7 +45,7 @@ async function postDailyClairo() {
     // Seleccionar foto que toca hoy
     const fotoDeHoy = archivos[state.currentIndex];
     const rutaFoto = path.join(fotosDir, fotoDeHoy);
-    const imageBuffer = fs.readFileSync(rutaFoto);
+    const originalBuffer = fs.readFileSync(rutaFoto);
 
     // Comprimir la imagen
     const imageBuffer = await sharp(originalBuffer)
