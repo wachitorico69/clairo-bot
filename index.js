@@ -1,6 +1,7 @@
 import { BskyAgent } from '@atproto/api';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 import 'dotenv/config';
 
 const agent = new BskyAgent({ service: 'https://bsky.social' });
@@ -46,9 +47,13 @@ async function postDailyClairo() {
     const rutaFoto = path.join(fotosDir, fotoDeHoy);
     const imageBuffer = fs.readFileSync(rutaFoto);
 
-    // Detectar el tipo de archivo dinámicamente
-    const extension = path.extname(fotoDeHoy).toLowerCase();
-    const mimeType = extension === '.png' ? 'image/png' : 'image/jpeg';
+    // Comprimir la imagen
+    const imageBuffer = await sharp(originalBuffer)
+      .resize({ width: 2000, withoutEnlargement: true }) // Evitar que exceda los 2000px de ancho
+      .jpeg({ quality: 80 }) // Comprimir y estandarizar todo a formato JPEG
+      .toBuffer();
+
+    const mimeType = 'image/jpeg';
 
     // Subir y publicar
     const { data } = await agent.uploadBlob(imageBuffer, { encoding: mimeType });

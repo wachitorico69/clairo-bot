@@ -2,7 +2,7 @@ name: Clairo Daily Bot
 
 on:
   schedule:
-    - cron: '0 18 * * *'
+    - cron: '15 18 * * *'
   workflow_dispatch: 
 
 permissions:
