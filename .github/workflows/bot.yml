@@ -2,7 +2,6 @@ name: Clairo Daily Bot
 
 on:
   schedule:
-    # 03:00 UTC equivale a las 21:00 (9:00 PM) hora centro de México
     - cron: '0 3 * * *'
   workflow_dispatch: 
 
